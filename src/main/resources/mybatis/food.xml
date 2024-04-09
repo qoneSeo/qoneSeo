@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 자식 XML 태그들은 dev.mvc.cfood.FoodDAOInter.java interface와 연결됨 -->
+<mapper namespace="dev.mvc.cfood.FoodDAOInter">
+  <!-- return: 등록한 레코드 갯수를 1을 리턴, parameterType: 전달받는 데이터 -->
+  <insert id="create" parameterType="dev.mvc.cfood.FoodVO">
+    INSERT INTO cfood(cfoodno, name, cnt, rdate) VALUES(cfood_seq.nextval, #{name}, 0, sysdate) 
+  </insert>
+
+  <!-- 전체 목록, SQL -> FoodVO -> ArrayList<FoodVO> return -->
+<!--   <select id="list_all" resultType="dev.mvc.cfood.FoodVO">
+    SELECT cfoodno, name, cnt, rdate FROM cfood ORDER BY cfoodno ASC
+  </select> -->
+
+  <!-- 출력 우선 순위 적용 -->
+<!--   <select id="list_all" resultType="dev.mvc.cfood.FoodVO">
+    SELECT cfoodno, name, cnt, rdate, seqno FROM cfood ORDER BY seqno ASC
+  </select>
+ -->
+ 
+  <!-- 출력 모드 적용 -->
+  <select id="list_all" resultType="dev.mvc.cfood.FoodVO">
+    SELECT cfoodno, name, cnt, rdate, seqno, visible FROM cfood ORDER BY seqno ASC
+  </select>
+
+  <!-- 비회원/회원 SELECT LIST -->
+  <select id="list_all_y" resultType="dev.mvc.cfood.FoodVO">
+    SELECT cfoodno, name, cnt, rdate, seqno, visible 
+    FROM cfood 
+    WHERE visible='Y'
+    ORDER BY seqno ASC
+  </select>
+      
+  <!-- 읽기, SQL -> FoodVO return -->
+  <select id="read" resultType="dev.mvc.cfood.FoodVO" parameterType="int">
+    SELECT cfoodno, name, cnt, rdate FROM cfood WHERE cfoodno=#{cfoodno}
+  </select>
+
+  <!-- return: 수정한 레코드 갯수 리턴, parameterType: 수정할 레코드 정보 -->
+  <update id="update" parameterType="dev.mvc.cfood.FoodVO">
+    UPDATE cfood SET name=#{name}, cnt=#{cnt} 
+    WHERE cfoodno=#{cfoodno}
+  </update>
+  
+  <!-- return: 삭제한 레코드 갯수 리턴, parameterType: 삭제할 레코드 정보 -->
+  <delete id="delete" parameterType="int">
+    DELETE FROM cfood WHERE cfoodno=#{cfoodno}
+  </delete>
+  
+  <!-- 우선 순위 높임, 10 등 -> 1 등 -->
+  <update id="update_seqno_forward" parameterType="int">
+    UPDATE cfood SET seqno = seqno - 1 WHERE cfoodno=#{cfoodno}
+  </update>
+
+  <!-- 우선 순위 낮춤, 1 등 -> 10 등 -->
+  <update id="update_seqno_backward" parameterType="int">
+    UPDATE cfood SET seqno = seqno + 1 WHERE cfoodno=#{cfoodno}
+  </update>
+  
+  <!-- 카테고리 공개 설정 -->
+  <update id="update_visible_y" parameterType="int">
+    UPDATE cfood SET visible='Y' WHERE cfoodno=#{cfoodno}
+  </update>
+  
+  <!-- 카테고리 비공개 설정 -->
+  <update id="update_visible_n" parameterType="int">
+    UPDATE cfood SET visible='N' WHERE cfoodno=#{cfoodno}
+  </update>
+          
+</mapper>
+
+
+
+
+

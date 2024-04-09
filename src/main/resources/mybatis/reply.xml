@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "dev.mvc.reply.ReplyDAOInter">
+    <insert id="create" parameterType="dev.mvc.reply.ReplyVO">
+    INSERT INTO reply(replyno, createsno, crewno, content, id, rdate)
+    VALUES(reply_seq.nextval, #{createsno}, #{crewno}, #{content}, #{id}, sysdate)
+    </insert>
+
+    <select id="list" resultType="dev.mvc.reply.ReplyVO">
+    SELECT replyno, createsno, crewno, content, id, rdate
+    FROM reply
+    ORDER BY replyno DESC
+    </select>
+    
+     <select id="read" resultType="dev.mvc.reply.ReplyVO">
+    SELECT replyno, createsno, crewno, content, id, rdate
+    FROM reply
+    WHERE replyno = #{replyno}
+    </select>
+    
+    <select id="list_by_createsno" resultType="dev.mvc.reply.ReplyVO" parameterType="int">
+    SELECT replyno, createsno, crewno, content, id, rdate
+    FROM reply
+    WHERE createsno = #{createsno}
+    ORDER BY rdate DESC
+    </select>
+  
+    <select id="list_by_createsno_join" resultType="dev.mvc.reply.ReplyVO" parameterType="int">
+    SELECT r.replyno, r.createsno, r.crewno, r.content,c.id, r.rdate 
+    FROM reply r, crew c
+    WHERE createsno=#{createsno} AND (r.crewno = c.crewno)
+    ORDER BY r.replyno DESC
+    </select>
+    
+    <delete id="delete" parameterType="int">
+    DELETE FROM reply
+    WHERE replyno=#{replyno}
+    </delete>
+
+    
+</mapper> 
+

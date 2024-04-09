@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="dev.mvc.mlogin.MloginDAOInter">
+  
+  <!-- 로그인내역 등록 -->
+  <insert id="create" parameterType="dev.mvc.mlogin.MloginVO">
+    INSERT INTO mlogin(mloginno,manageno,ip,logindate) 
+    VALUES (mlogin_seq.nextval, #{manageno}, #{ip}, sysdate)
+  </insert>
+
+    <!-- 로그인내역  목록-->
+    <select id="list_all" resultType="dev.mvc.mlogin.MloginVO">
+    SELECT mloginno,manageno,ip,logindate
+    FROM mlogin
+    ORDER BY logindate DESC
+   </select>
+    
+      <!-- 회원 로그인내역 리스트 -->
+  <select id="list_mlogin" resultType="dev.mvc.mlogin.MloginVO" parameterType="int">
+    SELECT mloginno,manageno,ip,logindate 
+    FROM mlogin 
+    where manageno = #{manageno}
+    ORDER BY logindate DESC
+  </select>    
+  
+  <!-- 번호 삭제 -->
+    <delete id="delete" parameterType="int">
+    DELETE FROM mlogin WHERE mloginno = #{mloginno}
+  </delete>
+
+
+</mapper>
+
+
+
+
+
